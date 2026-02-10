@@ -1,0 +1,8 @@
+{
+  "name": "mmm-qweather",
+  "version": "1.0.0",
+  "dependencies": {
+    "jose": "^5.2.0",
+    "node-fetch": "^3.3.2"
+  }
+}

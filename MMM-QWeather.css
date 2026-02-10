@@ -1,0 +1,286 @@
+/* =====================================================
+ * MMM-QWeather
+ * 全局设置 & 天气图标强制白色
+ * ===================================================== */
+
+/* 模块内所有天气图标：反色 + 提亮（适配深色背景） */
+.MMM-QWeather img {
+  filter: invert(1) brightness(1.2);
+}
+
+/* 模块整体文字样式 */
+.qweather {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* =====================================================
+ * 当前天气（基础样式，兼容旧结构）
+ * ===================================================== */
+
+.now {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 当前天气小图标 */
+.now-icon {
+  width: 64px;
+  height: 64px;
+}
+
+/* 当前温度（旧样式，保留） */
+.now-temp {
+  font-size: 42px;
+  font-weight: 300;
+}
+
+/* 当前天气文字描述 */
+.now-text {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+/* =====================================================
+ * 天气预报区域（通用）
+ * ===================================================== */
+
+.forecast {
+  margin-top: 10px;
+}
+
+/* 预报天气图标 */
+.forecast-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* =====================================================
+ * 模块标题 & 城市名
+ * ===================================================== */
+
+/* 主标题（备用 / 旧） */
+.qweather-title {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+/* 标题中的城市名 */
+.qweather-city {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* 标题下方分割线 */
+.qweather-line {
+  margin-top: 6px;
+  height: 1px;
+  background: rgba(255,255,255,0.3);
+}
+
+/* 标题文字 */
+.qweather-header-title
+.qweather-text {
+  font-size: 16px;
+  color: #ccc;
+}
+
+/* 标题副说明（备用） */
+.qweather-header-sub {
+  font-size: 12px;
+  color: #777;
+}
+
+/* =====================================================
+ * 当前天气（高级布局）
+ * ===================================================== */
+
+/* 当前天气整体区域 */
+.now-advanced {
+  text-align: center;
+  margin: 10px 0 20px;
+}
+
+/* 风向 / AQI / 日出日落（顶部信息） */
+.now-wind,
+.now-sunset {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* 中央区域：图标 + 温度 */
+.now-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 大号天气图标 */
+.now-icon-large {
+  width: 64px;
+}
+
+/* 体感温度（旧版，已内联显示） */
+.now-feels {
+  font-size: 14px;
+  color: #888;
+  margin-top: 4px;
+}
+
+/* 风向文字（统一调整） */
+.now-wind {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* =====================================================
+ * 天气预报行布局
+ * ===================================================== */
+
+.forecast-row {
+  display: grid;
+  grid-template-columns: 60px 40px 50px 50px;
+  column-gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+/* =====================================================
+ * 日出 / 日落时间
+ * ===================================================== */
+
+.now-sun {
+  margin-top: 6px;
+  letter-spacing: 1px;
+}
+
+/* =====================================================
+ * 温度 + 体感 inline 显示
+ * ===================================================== */
+
+/* 温度行容器 */
+.now-temp-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+/* 当前温度（大号） */
+.now-temp-large {
+  font-size: 64px;
+  font-weight: 300;
+}
+
+/* 温度中间的小点分隔符 */
+.now-temp-dot {
+  margin: 0 8px;
+  font-size: 28px;
+  opacity: 0.5;
+}
+
+/* 体感温度（跟在右边） */
+.now-feels-inline {
+  font-size: 22px;
+  opacity: 0.65;
+}
+
+/* =====================================================
+ * 标题对齐 & 分割线
+ * ===================================================== */
+
+/* 当前天气 / 预报标题：右对齐 */
+.qweather-header {
+  text-align: right;
+  margin-bottom: 8px;
+}
+
+/* 标题文字本体 */
+.qweather-header-title
+.qweather-text {
+  display: inline-block;
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+/* 标题下方横线 */
+.qweather-line,
+.qweather-header-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+}
+
+/* =====================================================
+ * 图标再次保险处理（限定模块作用域）
+ * ===================================================== */
+
+.MMM-QWeather .now-icon-large,
+.MMM-QWeather .forecast-icon {
+  filter: invert(1) brightness(1.2);
+}
+
+/* =====================================================
+ * 顶部信息：风向 / 日出日落 —— 靠右显示
+ * ===================================================== */
+
+.now-wind,
+.now-sun {
+  text-align: right;
+  width: 100%;
+  padding-right: 2px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* =====================================================
+ * 标题中的城市名强调
+ * ===================================================== */
+
+.qweather-header-title.qweather-city {
+  font-weight: 600;
+  color: #fff;
+}
+
+/* =====================================================
+ * AQI 数值 & 等级颜色
+ * ===================================================== */
+
+/* AQI 数值通用样式 */
+.aqi-value {
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* AQI：优 */
+.aqi-good {
+  color: #3ddc84;
+}
+
+/* AQI：良 */
+.aqi-moderate {
+  color: #f9d648;
+}
+
+/* AQI：轻度污染 */
+.aqi-light {
+  color: #ff9f43;
+}
+
+/* AQI：中度污染 */
+.aqi-medium {
+  color: #ff5c5c;
+}
+
+/* AQI：重度污染 */
+.aqi-heavy {
+  color: #b57cff;
+}
+
+/* AQI：严重污染 */
+.aqi-severe {
+  color: #8b0000;
+}
