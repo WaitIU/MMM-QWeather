@@ -1,7 +1,6 @@
 # MMM-QWeather 🌤️
 
-基于 **和风天气（QWeather）API** 的 MagicMirror² 天气模块  
-支持 **当前天气 / 多日预报 / 日出日落 / 空气质量 AQI（按等级变色）**
+基于 **和风天气（QWeather）API** 的 MagicMirror² 天气模块支持 **当前天气 / 多日预报 / 日出日落 / 空气质量 AQI（按等级变色）**
 
 > 🔐 使用和风天气 **EdDSA JWT 官方鉴权方式**
 
@@ -76,13 +75,14 @@ git pull
 
 ### 必填参数
 
-| 参数         | 说明                                                         |
-| ------------ | ------------------------------------------------------------ |
-| `location`   | 城市名称（支持 **中文 / 拼音 / 英文**） 示例：`渠县` / `quxian` / `New York` |
-| `apiBase`    | 和风天气 API Host 📖 https://dev.qweather.com/docs/configuration/api-host/ |
+
+| 参数         | 说明                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------- |
+| `location`   | 城市名称（支持**中文 / 拼音 / 英文**） 示例：`渠县` / `quxian` / `New York`           |
+| `apiBase`    | 和风天气 API Host 📖 https://dev.qweather.com/docs/configuration/api-host/            |
 | `privateKey` | Ed25519 私钥（JWT 用） 📖 https://dev.qweather.com/docs/configuration/authentication/ |
-| `sub`        | 项目 ID                                                      |
-| `kid`        | JWT 凭据 ID                                                  |
+| `sub`        | 项目 ID                                                                               |
+| `kid`        | JWT 凭据 ID                                                                           |
 
 ## 🎨 图标说明
 
@@ -95,7 +95,7 @@ git pull
 写这个模块的初衷是：
 
 > 国内网络环境下，可用的 MagicMirror² 天气模块选择不多，
->  而和风官方 QWeather API 稳定、数据完整，却一直缺少现成模块。
+> 而和风官方 QWeather API 稳定、数据完整，却一直缺少现成模块。
 
 所以我借助AI基于 **和风天气官方 API + JWT 鉴权** 写了这个模块。
 
@@ -103,6 +103,6 @@ git pull
 
 当然，拉取请求也非常欢迎。
 
-### 行为准则
+## 📜 行为准则
 
 请注意，本项目发布时附带了[贡献者盟约行为准则](www.contributor-covenant.org/version/2/1/code_of_conduct/)。参与本项目即表示您同意遵守其条款。
