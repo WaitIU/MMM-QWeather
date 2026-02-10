@@ -84,6 +84,12 @@ git pull
 | `sub`        | 项目 ID                                                                               |
 | `kid`        | JWT 凭据 ID                                                                           |
 
+## ⚠️ 注意事项
+
+- QWeather API 有调用频率限制
+- JWT 生命周期有时间限制
+- 建议 updateInterval ≥ 10 分钟
+
 ## 🎨 图标说明
 
 - 天气图标使用 **和风天气官方图标库**
