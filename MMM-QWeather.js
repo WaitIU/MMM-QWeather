@@ -161,7 +161,7 @@ Module.register("MMM-QWeather", {
           <img class="forecast-icon"
                src="${this.config.iconBase}${day.iconDay}.svg">
           <div>${day.tempMax}°~</div>
-          <div>~${day.tempMin}°</div>
+	  <div class="forecast-min">${day.tempMin}°</div>
         `;
 
         forecast.appendChild(row);

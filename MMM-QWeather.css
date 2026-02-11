@@ -1,6 +1,6 @@
 /* =====================================================
  * MMM-QWeather
- * 深色风格优化版
+ * 深色风格优化版（字体整体 +2px）
  * ===================================================== */
 
 /* =====================================================
@@ -17,7 +17,7 @@
 
 .qweather {
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;   /* 原 16px → 18px */
 }
 
 /* =====================================================
@@ -30,7 +30,7 @@
 }
 
 .qweather-header-title {
-  font-size: 16px;
+  font-size: 18px;   /* 原 16px */
   opacity: 0.85;
 }
 
@@ -64,7 +64,7 @@
 .now-wind {
   text-align: right;
   width: 100%;
-  font-size: 13px;
+  font-size: 15px;   /* 原 13px */
   opacity: 0.75;
 }
 
@@ -72,7 +72,7 @@
 .now-sun {
   text-align: right;
   width: 100%;
-  font-size: 13px;
+  font-size: 15px;   /* 原 13px */
   opacity: 0.85;
   margin-top: 4px;
 }
@@ -109,18 +109,18 @@
 }
 
 .now-temp-large {
-  font-size: 64px;
+  font-size: 66px;   /* 原 64px */
   font-weight: 300;
 }
 
 .now-temp-dot {
   margin: 0 8px;
-  font-size: 28px;
+  font-size: 30px;   /* 原 28px */
   opacity: 0.5;
 }
 
 .now-feels-inline {
-  font-size: 22px;
+  font-size: 24px;   /* 原 22px */
   opacity: 0.65;
 }
 
@@ -130,21 +130,29 @@
 
 .forecast {
   margin-top: 10px;
+  text-align: right;
 }
 
 .forecast-row {
   display: grid;
-  grid-template-columns: 60px 40px 50px 50px;
-  column-gap: 10px;
+  grid-template-columns: auto 40px 40px 40px;
+  column-gap: 8px;
   align-items: center;
-  font-size: 14px;
-  margin: 4px 0;
+  font-size: 18px;
+  margin: 6px 0;
+  justify-items: end;
 }
 
 .forecast-icon {
   width: 24px;
   height: 24px;
 }
+
+/* 最低温颜色淡一点 */
+.forecast-min {
+  color: rgba(255,255,255,0.6);
+}
+
 
 /* =====================================================
  * AQI 颜色等级
@@ -161,4 +169,3 @@
 .aqi-medium { color: #ff5c5c; }
 .aqi-heavy { color: #b57cff; }
 .aqi-severe { color: #8b0000; }
-
