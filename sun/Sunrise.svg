@@ -1,0 +1,43 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .sun {
+      animation: risePulse 2.5s ease-in-out infinite;
+      transform-origin: 8px 9px;
+    }
+    .rays {
+      animation: rayFade 2.5s ease-in-out infinite;
+    }
+    @keyframes risePulse {
+      0%,100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-0.5px) scale(1.1); }
+    }
+    @keyframes rayFade {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+  </style>
+
+  <!-- 天空渐变 -->
+  <defs>
+    <linearGradient id="sunriseGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFD166"></stop>
+      <stop offset="100%" stop-color="#FF7E5F"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="16" height="16" fill="url(#sunriseGrad)"></rect>
+
+  <!-- 太阳 -->
+  <circle class="sun" cx="8" cy="9" r="3" fill="#FFF176"></circle>
+
+  <!-- 光芒 -->
+  <g class="rays" stroke="#FFF176" stroke-width="0.8">
+    <line x1="8" y1="2" x2="8" y2="4"></line>
+    <line x1="3" y1="4" x2="5" y2="6"></line>
+    <line x1="13" y1="4" x2="11" y2="6"></line>
+  </g>
+
+  <!-- 山 -->
+  <path d="M0 12 L4 8 L7 11 L10 7 L16 12 L16 16 L0 16 Z" fill="#3E4A61"></path>
+</svg>

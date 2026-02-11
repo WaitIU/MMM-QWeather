@@ -1,17 +1,17 @@
 Module.register("MMM-QWeather", {
 
   /* ==============================
-   * 模块默认配置
+   * 默认配置
    * ============================== */
   defaults: {
-    location: "kunming",                     // 城市（用于 geo 查询 & 标题显示）
-    updateInterval: 60 * 60 * 1000,          // 刷新间隔：60 分钟
-    iconBase: "modules/MMM-QWeather/icons/", // 天气图标路径（保持你的格式）
-    forecastDays: 5                          // 未来预报天数
+    location: "kunming",
+    updateInterval: 26 * 60 * 1000,
+    iconBase: "modules/MMM-QWeather/icons/",
+    forecastDays: 5
   },
 
   /* ==============================
-   * 时间格式化：ISO → HH:mm
+   * ISO 时间 → HH:mm
    * ============================== */
   formatTime(iso) {
     if (!iso) return "--:--";
@@ -19,7 +19,7 @@ Module.register("MMM-QWeather", {
   },
 
   /* ==============================
-   * 预报日期文字：今天 / 明天 / 周X
+   * 日期文字
    * ============================== */
   getDayLabel(dateStr, index) {
     if (index === 0) return "今天";
@@ -29,7 +29,7 @@ Module.register("MMM-QWeather", {
   },
 
   /* ==============================
-   * AQI 数值 → CSS 颜色等级
+   * AQI 分级
    * ============================== */
   getAqiClass(aqi) {
     if (aqi <= 50) return "aqi-good";
@@ -40,19 +40,13 @@ Module.register("MMM-QWeather", {
     return "aqi-severe";
   },
 
-  /* ==============================
-   * 模块启动
-   * ============================== */
   start() {
-    this.now = null;     // 当前天气
-    this.daily = null;   // 未来预报
-    this.air = null;     // 空气质量
+    this.now = null;
+    this.daily = null;
+    this.air = null;
     this.sendSocketNotification("QWEATHER_INIT", this.config);
   },
 
-  /* ==============================
-   * 接收 NodeHelper 返回的数据
-   * ============================== */
   socketNotificationReceived(notification, payload) {
     if (notification === "QWEATHER_DATA") {
       this.now = payload.now;
@@ -62,19 +56,23 @@ Module.register("MMM-QWeather", {
     }
   },
 
-  /* ==============================
-   * 加载模块 CSS
-   * ============================== */
   getStyles() {
     return ["MMM-QWeather.css"];
   },
 
   /* ==============================
-   * 主 DOM 渲染函数
+   * 主 DOM
    * ============================== */
   getDom() {
+
     const wrapper = document.createElement("div");
     wrapper.className = "qweather";
+
+    /* ===== 防止数据未加载时报错 ===== */
+    if (!this.now || !this.daily) {
+      wrapper.innerHTML = "Loading weather...";
+      return wrapper;
+    }
 
     /* ===== 当前天气标题 ===== */
     const nowHeader = document.createElement("div");
@@ -83,44 +81,45 @@ Module.register("MMM-QWeather", {
       <div class="qweather-header-title">
         当前天气 · 
         <span class="qweather-city">${this.config.location}</span>
-        <span class="qweather-text">· ${this.now?.text || ""}</span>
+        <span class="qweather-text"> · ${this.now.text || ""}</span>
       </div>
       <div class="qweather-header-line"></div>
     `;
-
     wrapper.appendChild(nowHeader);
 
-    /* ===== 当前天气主体区域 ===== */
+    /* ===== 当前天气主体 ===== */
     const nowDiv = document.createElement("div");
     nowDiv.className = "now-advanced";
 
-    /* —— 风向 + AQI（右对齐） —— */
+    /* 风向 + AQI */
     const wind = document.createElement("div");
     wind.className = "now-wind";
 
     let aqiHtml = "";
     if (this.air && this.air.aqi) {
       const aqiClass = this.getAqiClass(this.air.aqi);
-      aqiHtml = `
-        · AQI
-        <span class="aqi-value ${aqiClass}">
-          ${this.air.aqi}
-        </span>
-      `;
+      aqiHtml = ` · AQI <span class="aqi-value ${aqiClass}">${this.air.aqi}</span>`;
     }
 
-    wind.innerHTML = `➜ ${this.now.windDir} · ${this.now.windScale}级${aqiHtml}`;
+    wind.innerHTML =
+      `➜ ${this.now.windDir} · ${this.now.windScale}级${aqiHtml}`;
 
-    /* —— 日出 / 日落时间（右对齐） —— */
+    /* 日出日落 */
     const sun = document.createElement("div");
     sun.className = "now-sun";
     sun.innerHTML = `
-      🌅 ${this.formatTime(this.now.sunrise)}
-      &nbsp;
-      🌇 ${this.formatTime(this.now.sunset)}
+      <span>
+        <img src="modules/MMM-QWeather/sun/Sunrise.svg" class="sun-icon">
+        ${this.formatTime(this.now.sunrise)}
+      </span>
+      &nbsp;&nbsp;
+      <span>
+        <img src="modules/MMM-QWeather/sun/Sunset.svg" class="sun-icon">
+        ${this.formatTime(this.now.sunset)}
+      </span>
     `;
 
-    /* —— 中央：天气图标 + 温度 + 体感 —— */
+    /* 中央区域 */
     const center = document.createElement("div");
     center.className = "now-center";
     center.innerHTML = `
@@ -135,7 +134,7 @@ Module.register("MMM-QWeather", {
     nowDiv.append(wind, sun, center);
     wrapper.appendChild(nowDiv);
 
-    /* ===== 天气预报标题 ===== */
+    /* ===== 预报标题 ===== */
     const forecastHeader = document.createElement("div");
     forecastHeader.className = "qweather-header";
     forecastHeader.innerHTML = `
@@ -146,36 +145,31 @@ Module.register("MMM-QWeather", {
     `;
     wrapper.appendChild(forecastHeader);
 
-    /* ===== 未来天气预报列表 ===== */
+    /* ===== 预报列表 ===== */
     const forecast = document.createElement("div");
     forecast.className = "forecast";
 
-    this.daily.slice(0, this.config.forecastDays).forEach((day, index) => {
-      const row = document.createElement("div");
-      row.className = "forecast-row";
+    this.daily
+      .slice(0, this.config.forecastDays)
+      .forEach((day, index) => {
 
-      const label = document.createElement("div");
-      label.className = "forecast-day";
-      label.innerHTML = this.getDayLabel(day.fxDate, index);
+        const row = document.createElement("div");
+        row.className = "forecast-row";
 
-      const icon = document.createElement("img");
-      icon.className = "forecast-icon";
-      icon.src = `${this.config.iconBase}${day.iconDay}.svg`;
+        row.innerHTML = `
+          <div>${this.getDayLabel(day.fxDate, index)}</div>
+          <img class="forecast-icon"
+               src="${this.config.iconBase}${day.iconDay}.svg">
+          <div>${day.tempMax}°~</div>
+          <div>~${day.tempMin}°</div>
+        `;
 
-      const tempMax = document.createElement("div");
-      tempMax.className = "forecast-max";
-      tempMax.innerHTML = `${day.tempMax}°~`;
-
-      const tempMin = document.createElement("div");
-      tempMin.className = "forecast-min";
-      tempMin.innerHTML = `~${day.tempMin}°`;
-
-      row.append(label, icon, tempMax, tempMin);
-      forecast.appendChild(row);
-    });
+        forecast.appendChild(row);
+      });
 
     wrapper.appendChild(forecast);
 
     return wrapper;
   }
 });
+

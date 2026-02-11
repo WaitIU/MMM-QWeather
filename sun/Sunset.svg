@@ -1,0 +1,41 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .sun {
+      animation: setPulse 2.5s ease-in-out infinite;
+      transform-origin: 8px 10px;
+    }
+    .sky {
+      animation: skyGlow 3s ease-in-out infinite;
+    }
+    @keyframes setPulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(0.9); opacity: 0.7; }
+    }
+    @keyframes skyGlow {
+      0%,100% { filter: brightness(1); }
+      50% { filter: brightness(1.1); }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="sunsetGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF7E5F"></stop>
+      <stop offset="100%" stop-color="#6A4C93"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect class="sky" width="16" height="16" fill="url(#sunsetGrad)"></rect>
+
+  <!-- 太阳 -->
+  <circle class="sun" cx="8" cy="10" r="3" fill="#FFD166"></circle>
+
+  <!-- 城市剪影 -->
+  <path d="M0 12 
+           L2 9 L3 12 
+           L5 8 L6 12 
+           L8 7 L9 12 
+           L11 9 L12 12 
+           L14 10 L16 12 
+           L16 16 L0 16 Z" fill="#2E294E"></path>
+</svg>
