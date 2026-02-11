@@ -86,6 +86,13 @@ module.exports = NodeHelper.create({
    * ===================================================== */
 
   /**
+   * 坐标统一格式化（最多两位小数）
+   */
+  formatCoord(value) {
+    return Number(value).toFixed(2);
+  },
+
+  /**
    * 判断 location 是否为城市 ID
    */
   isLocationId(loc) {
@@ -155,23 +162,40 @@ module.exports = NodeHelper.create({
 
   async get7dForecast(lat, lon) {
     const token = await this.generateJWT();
-
-    const url =
+  
+    const lat2 = this.formatCoord(lat);
+    const lon2 = this.formatCoord(lon);
+  
+    // ① 先尝试经纬度
+    let url =
       `${this.config.apiBase}/v7/grid-weather/7d` +
-      `?location=${lon},${lat}`;
-
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      `?location=${lon2},${lat2}`;
+  
+    let res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` }
     });
-
-    const data = await res.json();
-
+  
+    let data = await res.json();
+  
+    // ② 如果失败，自动 fallback 到 LocationID
+    if (data.code !== "200") {
+      console.warn("7d forecast fallback to LocationID");
+  
+      url =
+        `${this.config.apiBase}/v7/weather/7d` +
+        `?location=${this.location.id}`;
+  
+      res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      data = await res.json();
+    }
+  
     if (data.code !== "200") {
       throw new Error("7d forecast fetch failed");
     }
-
+  
     return data.daily;
   },
 
@@ -214,9 +238,10 @@ module.exports = NodeHelper.create({
        * ④ 空气质量 AQI
        */
       const air = await this.getAirQuality(
-        Number(this.location.lat).toFixed(2),
-        Number(this.location.lon).toFixed(2)
+        this.location.lat,
+        this.location.lon
       );
+
 
       /**
        * ⑤ 发送给前端模块
@@ -240,26 +265,52 @@ module.exports = NodeHelper.create({
    * 日出 / 日落时间
    * ===================================================== */
 
+
   async getSunTime(lat, lon) {
     const token = await this.generateJWT();
-    // YYYYMMDD
-    const today = new Date()
-      .toISOString()
-      .slice(0, 10)
-      .replace(/-/g, "");
+  
+    // yyyyMMdd
+    const now = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "Asia/Shanghai" })
+    );
+    
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    
+    const today = `${yyyy}${mm}${dd}`;
+  
 
-    const url =
+    const lat2 = this.formatCoord(lat);
+    const lon2 = this.formatCoord(lon);
+  
+    // ===== ① 先用经纬度 =====
+    let url =
       `${this.config.apiBase}/v7/astronomy/sun` +
-      `?location=${lon},${lat}&date=${today}`;
-
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      `?location=${lon2},${lat2}&date=${today}`;
+  
+    let res = await fetch(url, {
+      headers: { Authorization: `Bearer ${token}` }
     });
-
-    const data = await res.json();
-
+  
+    let data = await res.json();
+  
+    // ===== ② 如果失败，fallback 用 LocationID =====
+    if (data.code !== "200") {
+      console.warn("Sun API fallback to LocationID");
+  
+      url =
+        `${this.config.apiBase}/v7/astronomy/sun` +
+        `?location=${this.location.id}&date=${today}`;
+  
+      res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+  
+      data = await res.json();
+    }
+  
+    // ===== ③ 最终失败处理 =====
     if (data.code !== "200") {
       console.error("Sun API error:", data);
       return {
@@ -267,13 +318,12 @@ module.exports = NodeHelper.create({
         sunset: "--:--"
       };
     }
-
+  
     return {
       sunrise: data.sunrise,
       sunset: data.sunset
     };
-  },
-
+  },	
 
   /* =====================================================
    * 空气质量 AQI
@@ -281,28 +331,30 @@ module.exports = NodeHelper.create({
 
   async getAirQuality(lat, lon) {
     const token = await this.generateJWT();
-
+  
+    const lat2 = this.formatCoord(lat);
+    const lon2 = this.formatCoord(lon);
+  
     const url =
-      `${this.config.apiBase}/airquality/v1/current/${lat}/${lon}`;
-
+      `${this.config.apiBase}/airquality/v1/current/${lat2}/${lon2}`;
+  
     const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
-
+  
     const data = await res.json();
-
+  
     if (!data.indexes || !data.indexes.length) {
       return null;
     }
-
+  
     const idx = data.indexes[0];
-
+  
     return {
-      aqi: idx.aqiDisplay,   // AQI 数值
-      category: idx.category, // AQI 等级文字
-      color: idx.color      // 官方推荐颜色
+      aqi: idx.aqiDisplay,
+      category: idx.category,
+      color: idx.color
     };
   },
+	
 });

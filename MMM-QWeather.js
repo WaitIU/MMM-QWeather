@@ -5,7 +5,7 @@ Module.register("MMM-QWeather", {
    * ============================== */
   defaults: {
     location: "kunming",                     // 城市（用于 geo 查询 & 标题显示）
-    updateInterval: 16 * 60 * 1000,          // 刷新间隔：16 分钟
+    updateInterval: 60 * 60 * 1000,          // 刷新间隔：60 分钟
     iconBase: "modules/MMM-QWeather/icons/", // 天气图标路径（保持你的格式）
     forecastDays: 5                          // 未来预报天数
   },
